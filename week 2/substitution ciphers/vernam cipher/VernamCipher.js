@@ -1,5 +1,5 @@
 const { CipherCore } = require('../lib/CipherCore');
-
+// XOR
 class VernamCipher extends CipherCore {
     constructor(key) {
         super();

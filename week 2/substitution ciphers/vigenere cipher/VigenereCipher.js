@@ -1,5 +1,5 @@
 const { CipherCore } = require('../lib/CipherCore');
-
+// (keyPos + letterPos) mod 26 === cipher letter pos
 class VigenereCipher extends CipherCore {
     constructor(key) {
         super();

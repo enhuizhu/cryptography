@@ -1,3 +1,4 @@
+// zig-zag
 class RailFenceCipher {
     constructor(depth) {
         this.depth = depth;

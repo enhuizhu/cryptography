@@ -1,3 +1,13 @@
+/**
+ * 
+ * @param {*} text 
+ * @returns 
+ * 1. reorder alphabet base on key
+ * 2. if pair is on same row, cipher letter is on the right
+ * 3. if pair is on same column, cipher letter is under the original letter
+ * 4. otherwise cipher letter is on another diagonal of small react
+ */
+
 // delete duplicate keys
 const deleteDuplicateLetter = (text) => {
     let result = '';
