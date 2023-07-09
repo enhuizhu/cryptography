@@ -1,27 +1,12 @@
-class VigenereCipher {
+const { CipherCore } = require('../lib/CipherCore');
+
+class VigenereCipher extends CipherCore {
     constructor(key) {
+        super();
         this.key = key;
         this.alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     }
     
-    generateCorrespondKey(key, msg) {
-        const restKeysLengthRequired = msg.length - key.length;
-        const numberOfKey = Math.floor(restKeysLengthRequired / key.length);
-        const remainKeyLength = restKeysLengthRequired % key.length;
-
-        let finalKey = key;
-
-        for (let i = 0; i < numberOfKey; i++) {
-            finalKey = `${finalKey}${key}`;
-        }
-
-        if (remainKeyLength) {
-            finalKey = `${finalKey}${key.substr(0, remainKeyLength)}`;
-        }
-
-        return finalKey;
-    }
-
     getLetterPos(letter) {
         return this.alphabets.indexOf(letter.toUpperCase());
     }
@@ -44,12 +29,13 @@ class VigenereCipher {
     }
 
     encryptMsg(msg) {
-        const correspondKey = this.generateCorrespondKey(this.key, msg);
+        const msgWithoutSpace = msg.replaceAll(' ', '');
+        const correspondKey = this.generateCorrespondKey(this.key, msgWithoutSpace);
 
         let result = '';
 
         for (let i = 0; i < correspondKey.length; i++) {
-            result += this.encryptLetter(correspondKey[i], msg[i]);
+            result += this.encryptLetter(correspondKey[i], msgWithoutSpace[i]);
         }
 
         return result;
@@ -73,3 +59,7 @@ const vigenereCipher = new VigenereCipher('deceptive');
 console.assert(vigenereCipher.generateCorrespondKey('deceptive', 'wearediscoveredsaveyourself') === 'deceptivedeceptivedeceptive', "vigenereCipher.generateCorrespondKey('deceptive', 'wearediscoveredsaveyourself') fail");
 console.assert(vigenereCipher.encryptMsg('wearediscoveredsaveyourself') === 'ZICVTWQNGRZGVTWAVZHCQYGLMGJ', "vigenereCipher.encryptMsg('wearediscoveredsaveyourself') === 'ZICVTWQNGRZGVTWAVZHCQYGLMGJ' fail");
 console.assert(vigenereCipher.decryptMsg('ZICVTWQNGRZGVTWAVZHCQYGLMGJ') === 'WEAREDISCOVEREDSAVEYOURSELF', "vigenereCipher.decryptMsg('ZICVTWQNGRZGVTWAVZHCQYGLMGJ') === 'WEAREDISCOVEREDSAVEYOURSELF'' fail");
+
+const vigenereCipher2 = new VigenereCipher('RELATIONS');
+console.assert(vigenereCipher2.encryptMsg('TO BE OR NOT TO BE THAT IS THE QUESTION') === 'KSMEHZBBLKSMEMPOGAJXSEJCSFLZSY', "vigenereCipher2.encryptMsg('TO BE OR NOT TO BE THAT IS THE QUESTION') fail");
+
