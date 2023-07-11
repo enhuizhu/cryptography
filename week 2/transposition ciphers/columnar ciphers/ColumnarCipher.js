@@ -1,6 +1,12 @@
+/**
+ * 1. put letters into different columns base on the key provided.
+ * 2. read new letters from row to row.
+ */
+
 class ColumnarCipher {
-    constructor(key) {
+    constructor(key, round = 1) {
         this.key = key;
+        this.round = round;
     }
 
     getKeyMap(initValue) {
@@ -28,13 +34,25 @@ class ColumnarCipher {
         return keyMap;
     }
 
-    encrypt(text) {
+    encrypt(originalText, round) {
+        const text = originalText.replaceAll(' ', '')
+
+        if (!round) {
+            round = this.round
+        }
+
         const keyString = this.key.toString();
         const keyMap = this.getKeyLetterMap(text);
         
-        return keyString.split('').sort((a, b) => a - b).reduce((acc, key) => {
+        const result = keyString.split('').sort((a, b) => a - b).reduce((acc, key) => {
             return `${acc}${keyMap[key].join('')}`
         }, '');
+
+        if (round > 1) {
+            return this.encrypt(result, --round)
+        }
+
+        return result;
     }
 
     isMapEmpty(map) {
@@ -47,7 +65,11 @@ class ColumnarCipher {
         return true;
     }
 
-    decrypt(cipherText) {
+    decrypt(cipherText, round) {
+        if (!round) {
+            round = this.round;
+        }
+
         const keyString = this.key.toString();
         const numberLettersInColumn = Math.floor(cipherText.length / keyString.length);
         let numberOfRemainLetters = cipherText.length % keyString.length;
@@ -75,8 +97,14 @@ class ColumnarCipher {
 
         while(!this.isMapEmpty(originalTextMap)) {
             for (const key of keyString) {
-                result += originalTextMap[key].shift();
+                if (originalTextMap[key].length) {
+                    result += originalTextMap[key].shift();
+                }
             }
+        }
+
+        if (round > 1) {
+            return this.decrypt(result, --round)
         }
 
         return result;
@@ -85,6 +113,12 @@ class ColumnarCipher {
 
 
 const columnarCipher = new ColumnarCipher(4321);
-
 console.assert(columnarCipher.encrypt('hello') === 'lleho', "columnarCipher.encrypt('hell') === 'lleh' fail")
 console.assert(columnarCipher.decrypt('lleho') === 'hello', "columnarCipher.decrypt('lleho') === 'hello' fail")
+
+const columnarCipher2 = new ColumnarCipher(4321, 2);
+console.assert(columnarCipher.encrypt('helloo') === 'lleoho', "columnarCipher.encrypt('helloo') === 'lleoho' fail")
+console.assert(columnarCipher.decrypt('lleoho') === 'helloo', "columnarCipher.decrypt('lleoho') === 'helloo' fail")
+
+const columnarCipher3 = new ColumnarCipher(3571426, 2);
+console.assert(columnarCipher3.encrypt('The Enigma cipher machine had the confidence of German forces who depended on its security') === 'diorofapeceohecnhhurarEwhyrhscedefioecfmneaiindTcttmneanisnpdogdnctGmeiheees', "columnarCipher3.encrypt('The Enigma cipher machine had the confidence of German forces who depended on its security') === 'diorofapeceohecnhhurarEwhyrhscedefioecfmneaiindTcttmneanisnpdogdnctGmeiheees' fail");

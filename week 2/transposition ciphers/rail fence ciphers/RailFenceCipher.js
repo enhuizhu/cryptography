@@ -46,7 +46,7 @@ class RailFenceCipher {
             result = `${result}${row.join('')}`;
         }
 
-        return result;
+        return result.toUpperCase();
     }
 
     isEmptyMatrix(matrix) {
@@ -100,6 +100,10 @@ class RailFenceCipher {
 
 const railFenceCipher = new RailFenceCipher(3);
 
-const result = railFenceCipher.encrypt('WE ARE DISCOVERED FLEE AT ONCE');
 console.assert(railFenceCipher.encrypt('WE ARE DISCOVERED FLEE AT ONCE') === 'WECRLTEERDSOEEFEAOCAIVDEN', "railFenceCipher.encrypt('WE ARE DISCOVERED FLEE AT ONCE') === 'WECRLTEERDSOEEFEAOCAIVDEN' fail")
 console.assert(railFenceCipher.decrypt('WECRLTEERDSOEEFEAOCAIVDEN') === 'WEAREDISCOVEREDFLEEATONCE', "railFenceCipher.decrypt('WECRLTEERDSOEEFEAOCAIVDEN') === 'WEAREDISCOVEREDFLEEATONCE' fail");
+console.assert(railFenceCipher.encrypt('Alan Turing the Enigma') === 'ATNEGLNUIGHEIMARTNA', "railFenceCipher.encrypt('Alan Turing the Enigma') === 'ATNEGLNUIGHEIMARTNA' fail")
+
+
+const railFenceCipher2 = new RailFenceCipher(5);
+console.assert(railFenceCipher2.decrypt('AILLROLMGREMBEACESWUELIINAERAADTOTWHLWIETOMTEGNIIMUHCDONHAIEHIGPIDTT') === 'ARETHEREIMAGINABLEDIGITALCOMPUTERSWHICHWOULDDOWELLINTHEIMITATIONGAME', "railFenceCipher2.decrypt('AILLROLMGREMBEACESWUELIINAERAADTOTWHLWIETOMTEGNIIMUHCDONHAIEHIGPIDTT') === 'ARETHEREIMAGINABLEDIGITALCOMPUTERSWHICHWOULDDOWELLINTHEIMITATIONGAME' fail")
