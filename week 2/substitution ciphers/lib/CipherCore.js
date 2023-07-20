@@ -1,4 +1,11 @@
 class CipherCore {
+    constructor() {
+        this.alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    }
+    getLetterPos(letter) {
+        return this.alphabets.indexOf(letter.toUpperCase());
+    }
+
     generateCorrespondKey(key, msg) {
         const restKeysLengthRequired = msg.length - key.length;
         const numberOfKey = Math.floor(restKeysLengthRequired / key.length);

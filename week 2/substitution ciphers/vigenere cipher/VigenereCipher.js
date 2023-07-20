@@ -4,7 +4,6 @@ class VigenereCipher extends CipherCore {
     constructor(key) {
         super();
         this.key = key;
-        this.alphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
     }
     
     getLetterPos(letter) {
@@ -53,7 +52,7 @@ class VigenereCipher extends CipherCore {
         return result;
     }
 }
-
+cl
 const vigenereCipher = new VigenereCipher('deceptive');
 
 console.assert(vigenereCipher.generateCorrespondKey('deceptive', 'wearediscoveredsaveyourself') === 'deceptivedeceptivedeceptive', "vigenereCipher.generateCorrespondKey('deceptive', 'wearediscoveredsaveyourself') fail");

@@ -10,7 +10,7 @@
  */
 
 class FeistelCipher {
-    constructor(keys, encryptFunc, decryptFunc) {
+    constructor(keys, encryptFunc) {
         this.keys = keys;
         this.totalRound = keys.length;
         this.encryptFunc = encryptFunc;
