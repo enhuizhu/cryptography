@@ -1,5 +1,9 @@
-class DESCipher {
+const { CipherCore } = require('../../lib/CipherCore');
+
+class DESCipher extends CipherCore {
   constructor(keyString, encryptFunc) {
+    super();
+
     if (!this.keyCheck(keyString)) {
       throw new Error("invalid key");
     }
@@ -461,24 +465,6 @@ class DESCipher {
       this.invertInitialPermutationTable
     );
   }
-
-  bitsXor(bits1, bits2) {
-    if (bits1.length !== bits2.length) {
-      throw new Error(`${bits1} must have same length as ${bits2}`);
-    }
-
-    let result = '';
-
-    for (let i = 0; i < bits1.length; i++) {
-      if (bits1[i] !== bits2[i]) {
-        result += '1'
-      } else {
-        result += '0';
-      }
-    }
-
-    return result;
-  }
 }
 
 const keyString = `0001001100110100010101110111100110011011101111001101111111110001`;
@@ -504,6 +490,8 @@ console.log({
   testBitText,
   cipher
 })
+
+console.log('128bit', dESCipher.generateBitData(128));
 
 console.assert(
   dESCipher.reduceKeySizeFrom56To48(bitText).length === 48,
