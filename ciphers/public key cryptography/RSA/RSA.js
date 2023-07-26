@@ -84,3 +84,5 @@ class RSA {
     return result;
   }
 }
+
+module.exports = { RSA }
