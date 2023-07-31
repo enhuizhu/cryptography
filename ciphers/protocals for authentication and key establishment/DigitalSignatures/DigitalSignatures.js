@@ -37,6 +37,19 @@
     false, otherwise
  } 
  *
+ * RSA and DSA
+ * 
+ * Bob verifies whether h(m') = Ee(Dd(h(m)))
+ * 
+ * If the equality holds then the message has been signed by alice
+ * The pair can be additionally encrypted for confidentially
+ * 
+ * Digital Signature Algorithm (DSA)
+ * This is a USA Federal information Processing Standard for digital
+ * signatures. it was proposed by the National Institute of Standards
+ * and Technology (NIST) in August 1991 for use in their Digital Signature
+ * Standard (DSS)
+ * 
  */
 
 class DigitalSignature {

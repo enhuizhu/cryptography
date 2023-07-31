@@ -1,4 +1,4 @@
-const { CipherCore } = require('../lib/CipherCore');
+const { CipherCore } = require('../../lib/CipherCore');
 /**
  * C = E(K, P) = P * K mod 26
  * D = D(K, C) = C * inverse(k) mod 26 = P * K * inverse(k) mod 26
@@ -318,7 +318,25 @@ console.log(hillCipher.matrixMultiplication([[2, 3, 4]], [
     [8, 5, 10],
     [21, 8, 21],
     [21, 12, 8]
-]))
+]));
+
+console.log(hillCipher.matrixMultiplication([[12, 4, 13]], [
+    [8, 5, 10],
+    [21, 8, 21],
+    [21, 12, 8]
+]));
+
+console.log(hillCipher.matrixMultiplication([[5, 15, 11]], [
+    [8, 5, 10],
+    [21, 8, 21],
+    [21, 12, 8]
+]));
+
+console.log(hillCipher.matrixMultiplication([[23, 25, 6]], [
+    [8, 5, 10],
+    [21, 8, 21],
+    [21, 12, 8]
+]));
 
 // console.log(hillCipher.matrixMultiplication([[6, 24, 1],
 //     [13, 16, 10],
