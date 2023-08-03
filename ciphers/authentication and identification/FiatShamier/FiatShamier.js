@@ -19,6 +19,7 @@ class FiatShamir {
 
     generateProversKeyPair() {
         // private key
+        // 1 to n - 1
         this.s = Math.round(Math.random() * (this.N - 2) + 1);
         // public key
         this.v = Math.pow(this.s, 2 ) % this.N;
@@ -30,11 +31,13 @@ class FiatShamir {
      * x = Math.pow(r, 2) mod and send it to victor
      */
     sendWitnessToVerifier() {
+        // commitment 0 to n - 1
         this.r = Math.round(Math.random() * (this.N - 1));
+        // witness
         this.x = Math.pow(r, 2) % this.N;
 
         fetch({
-            url: this.proversIP,
+            url: this.verifierIP,
             method: 'post',
             data: JSON.stringify({
                 witness: this.x 
@@ -47,6 +50,7 @@ class FiatShamir {
      * verifier send challenge to c to prover
      */
     sendChallengeToProver() {
+        // 0 or 1
         this.c = Math.round(Math.random());
         
         fetch({
@@ -66,16 +70,19 @@ class FiatShamir {
         this.Y = (this.r * Math.pow(this.s, this.c)) % this.N;
 
         fetch({
-            url: this.proversIP,
+            url: this.verifierIP,
             method: 'POST',
             data: JSON.stringify({
                 y: this.Y
             })
         })
     }
-    
+    // witnessMuptiPublicKey = ((r^2 % n) * (s^2 % n)^c) % n
+    // ypower = (r^2 * (s^c % n)^2) % n
     verifyY() {
         const yPower = Math.power(this.Y, 2) % this.N;
+        
+        
         const witnessMuptiPublicKey = (this.x * Math.pow(this.v, this.c)) % this.N;
 
         return yPower === witnessMuptiPublicKey;

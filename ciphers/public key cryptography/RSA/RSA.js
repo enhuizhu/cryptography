@@ -64,11 +64,19 @@ class RSA {
     };
   }
 
+  encryptM(m) {
+    return Math.pow(m, this.E) % this.N;
+  };
+
+  decryptC(c) {
+    return Math.pow(c, this.D) % this.N;
+  }
+
   encrypt(plainTextNumberArr) {
     const result = [];
 
     for (const plainTextNumber of plainTextNumberArr) {
-      result.push(Math.pow(plainTextNumber, this.E)) % this.N;
+      result.push(this.encryptM(plainTextNumber));
     }
 
     return result;
@@ -78,7 +86,7 @@ class RSA {
     const result = [];
 
     for (const cipherTextNumber of cipHerTextNumberArr) {
-      result.push(Math.pow(cipherTextNumber, this.D) % this.N);
+      result.push(this.decryptC(cipherTextNumber));
     }
 
     return result;

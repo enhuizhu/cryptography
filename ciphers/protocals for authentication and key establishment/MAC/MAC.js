@@ -1,3 +1,11 @@
+// MAC key is symmetric key
+// and it's shared by alice and bob
+// alice send m and MAC' to bob
+// bob use Hk(k, m) to generate MAC
+// AND them compare it to MAC'
+// if mac === MAC', then it means
+// the message is sent by alice
+
 class MAC {
   constructor(K, Hk) {
     this.K = K;

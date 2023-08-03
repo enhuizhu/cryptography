@@ -52,27 +52,36 @@
  * 
  */
 
+const { RSA } = require('../../public key cryptography/RSA/RSA')
+
+// digital signature need public key and also private key
+// private key is used to sign the message
+// public key is used to verify the message
+// Alice send m and s = Sa(m) to bob
+// s is decrypted by alice private key
+// bob receive (m, s), bob will use VA to verify 
+// if Ee(s) === m, if it's true, then the message
+// is sent by alice.
 class DigitalSignature {
   // e public key, d private key
-  constructor(key, signableMessages) {
-    this.key = key;
+  constructor(p, q, signableMessages) {
+    this.RSA = new RSA(p, q);
     this.signableMessages = signableMessages;
   }
-
+  
+  // Signing transformation
+  // SA is Dd it need private key
+  // can use RSA to decrypt it 
   SA(m) {
-    let pos = (m - this.key) % 26;
-
-    if (pos < 0) {
-      pos += 26;
-    }
-
-    return pos;
+    return this.RSA.decryptC(m);
   }
 
+  // e is public key
   Ee(s) {
-    return (s + this.key) % 26;
+    return this.RSA.encrypt(s);
   }
 
+  // verification transformation
   VA(m, s) {
     return this.Ee(s) === m && this.signableMessages.includes(s);
   }
