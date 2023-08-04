@@ -6,6 +6,9 @@
 // if mac === MAC', then it means
 // the message is sent by alice
 
+// the only different between MAC and MDC is that
+// MAC include a secret between Alice and Bob
+
 class MAC {
   constructor(K, Hk) {
     this.K = K;
