@@ -1,1 +1,1 @@
-export * from './PlayCipher';
+export * from './PlayfairCipher';

@@ -2,7 +2,9 @@ import React, { FC } from 'react';
 import { ListItem, ListItemText, List } from '@mui/material';
 import { AtashCipher } from '../atash-cipher/AtashCipher';
 import { CaesarCipherUI } from '../caesar-cipher/CaesarCipher';
-import { PlayfairCipherUI } from '../play-cipher/PlayCipher';
+import { PlayfairCipherUI } from '../play-cipher/PlayfairCipher';
+import { VigenereCipherUI } from '../vigenere-cipher';
+import { VernamCipherUI } from '../vernam-cipher';
 
 interface linkItem {
   label: string;
@@ -21,6 +23,14 @@ const links: linkItem[] = [
   {
     label: 'Play Cipher (substitution ciphers)',
     component: PlayfairCipherUI,
+  },
+  {
+    label: 'Vigenere Cipher (substitution ciphers)',
+    component: VigenereCipherUI,
+  },
+  {
+    label: 'Vernam Cipher (substitution ciphers)',
+    component: VernamCipherUI,
   }   
 ];
 
