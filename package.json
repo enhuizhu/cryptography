@@ -1,0 +1,12 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "ciphers",
+    "doc"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "lerna": "^7.0.1"
+  }
+}
