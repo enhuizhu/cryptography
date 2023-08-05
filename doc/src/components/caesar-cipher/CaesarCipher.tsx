@@ -72,11 +72,11 @@ export const CaesarCipherUI: FC = () => {
             </Box>
             The decryption process is:
             <Box fontWeight={"bold"} component={"div"} margin={"1rem 0"}>
-              C = (P - K) mod 26
+              P = (C - K) mod 26
             </Box>
-            if (P - K) is less then 0, for example P - K equal to -1, then we
+            if (C - K) is less then 0, for example C - K equal to -1, then we
             should add 26, to make it map to the correct value, for this example
-            if P - K equal to -1, then (P - K) mod 26 should be 25.
+            if C - K equal to -1, then (C - K) mod 26 should be 25.
           </Typography>
         </Box>
       }

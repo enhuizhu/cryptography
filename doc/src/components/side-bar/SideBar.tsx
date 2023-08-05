@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { ListItem, ListItemText, List } from '@mui/material';
 import { AtashCipher } from '../atash-cipher/AtashCipher';
 import { CaesarCipherUI } from '../caesar-cipher/CaesarCipher';
+import { PlayfairCipherUI } from '../play-cipher/PlayCipher';
 
 interface linkItem {
   label: string;
@@ -16,6 +17,10 @@ const links: linkItem[] = [
   {
     label: 'Caesar Cipher (substitution ciphers)',
     component: CaesarCipherUI,
+  },
+  {
+    label: 'Play Cipher (substitution ciphers)',
+    component: PlayfairCipherUI,
   }   
 ];
 
