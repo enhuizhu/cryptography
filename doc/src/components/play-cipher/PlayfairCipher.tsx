@@ -40,8 +40,8 @@ export const PlayfairCipherUI: FC = () => {
             <Box fontWeight="bold" marginBottom="1rem">
               Encryption
             </Box>
-            the following are the steps to to generate cipher text base paly
-            fair method.
+            the following are the steps to generate cipher text base paly
+            fair.
             <Box marginTop="1rem">
               1. Split the message into pairs, if pair contains the same letter,
               for example: ["L", "L"], then we need to append X to the pair, so
