@@ -52,7 +52,7 @@
  * 
  */
 
-const { RSA } = require('../../public key cryptography/RSA/RSA')
+const { RSA } = require('../../public-key-cryptography/RSA/RSA')
 
 // digital signature need public key and also private key
 // private key is used to sign the message

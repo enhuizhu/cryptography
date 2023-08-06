@@ -1,4 +1,4 @@
-const { CipherCore } = require('../../src/lib/CipherCore');
+const { CipherCore } = require('../../lib/CipherCore');
 
 class DESCipher extends CipherCore {
   constructor(keyString, encryptFunc) {
