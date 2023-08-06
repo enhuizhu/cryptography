@@ -62,13 +62,13 @@ export const VigenereCipherUI: FC = () => {
             <Box>
               1. Base on the length of message, you may need to expand the key.
               for example if the message is "HELLOWORLD" and the original key is
-              "AB", then you need to expand it to make it have exactly same
+              "AB", then you need to expand it to make it having exactly same
               length as "HELLOWORLD", so the expanded key should be
               "ABABABABAB".
             </Box>
             <Box>
               2. Let's say the position (in alphabets list A,B,C,D ....X,Y,Z) of
-              each letter is Pi, the position of of each key letter is Ki, and the
+              each letter is Pi, the position of of each letter in the key is Ki, and the
               position of each cipher letter is Ci. we will have the following
               formula:
               <Typography fontWeight="bold">Ci = (Pi + Ki) mod 26</Typography>

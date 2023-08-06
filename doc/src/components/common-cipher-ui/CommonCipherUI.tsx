@@ -4,6 +4,7 @@ import { TextField, Typography, Button, Box } from '@mui/material';
 export interface CommonCipherUIProps {
   result?: string;
   key?: string;
+  labelOfKey?: string;
   onButtonClick: (text: string, key: string) => void;
   withKey?: boolean;
   isEncryption?: boolean;
@@ -12,6 +13,7 @@ export interface CommonCipherUIProps {
 export const CommonCipherUI: FC<CommonCipherUIProps> = ({
   result,
   onButtonClick,
+  labelOfKey = 'key',
   withKey = false,
   isEncryption = true,
 }) => {
@@ -36,8 +38,8 @@ export const CommonCipherUI: FC<CommonCipherUIProps> = ({
           type='text'
           value={key}
           onChange={(e) => setKey(e.target.value)}
-          aria-label='key'
-          label='key'
+          aria-label={labelOfKey}
+          label={labelOfKey}
           variant='standard'
         />
       </Box>}
