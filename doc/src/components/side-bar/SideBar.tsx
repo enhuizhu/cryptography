@@ -8,6 +8,7 @@ import { VernamCipherUI } from '../vernam-cipher';
 import { RailFenceCipherUI } from '../rail-fence-cipher';
 import { ColumnarCipherUI } from '../columnar-cipher';
 import { FeistelCipherUI } from '../feistel-cipher';
+import { DesCipherUI } from '../des-cipher';
 
 interface linkItem {
   label: string;
@@ -46,6 +47,10 @@ const links: linkItem[] = [
   {
     label: 'Feistel Cipher (composite ciphers)',
     component: FeistelCipherUI,
+  },      
+  {
+    label: 'DES Cipher (composite ciphers)',
+    component: DesCipherUI,
   }      
 ];
 

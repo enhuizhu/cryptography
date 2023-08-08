@@ -14,7 +14,7 @@ import { CipherCore } from "../../lib/CipherCore";
  * RD_i = LE_16-i
  */
 
-type EncryptFunc = (letter: number, key: number) => number;
+export type EncryptFunc = (letter: number, key: number) => number;
 
 export class FeistelCipher extends CipherCore {
   public keys: number[];
@@ -32,8 +32,7 @@ export class FeistelCipher extends CipherCore {
     this.keys = keys;
   }
 
-  // the text must contains two letters
-  encrypt(blocksText: string) {
+  encryptOrDecrypt(blocksText: string, isEncrypt = true) {
     if (blocksText.length !== 2) {
       throw new Error("only accept block text with length 2 for now");
     }
@@ -44,7 +43,7 @@ export class FeistelCipher extends CipherCore {
     const copyKeys = [...this.keys];
 
     while (copyKeys.length) {
-      const key = copyKeys.shift();
+      const key =  isEncrypt ? copyKeys.shift() : copyKeys.pop();
       const encryptRight = this.encryptFunc(right, key as number);
       const temp = right;
       right = (encryptRight ^ left) % 26;
@@ -54,21 +53,13 @@ export class FeistelCipher extends CipherCore {
     return `${this.alphabets[right]}${this.alphabets[left]}`;
   }
 
+  // the text must contains two letters
+  encrypt(blocksText: string) {
+    return this.encryptOrDecrypt(blocksText);
+  }
+
   decrypt(cipherText: string) {
-    let dLeft = this.getLetterPos(cipherText[0]);
-    let dRight = this.getLetterPos(cipherText[1]);
-    const copyKeys = [...this.keys];
-
-    while (copyKeys.length) {
-      const key = copyKeys.pop();
-      
-      const encryptRight = this.encryptFunc(dRight, key as number);
-      const temp = dRight;
-      dRight = (encryptRight ^ dLeft) % 26;
-      dLeft = temp;
-    }
-
-    return `${this.alphabets[dRight]}${this.alphabets[dLeft]}`;
+    return this.encryptOrDecrypt(cipherText, false);
   }
 
   putTextsIntoPairs(texts: string) {

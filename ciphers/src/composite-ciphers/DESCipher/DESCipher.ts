@@ -1,9 +1,20 @@
-const { CipherCore } = require('../../lib/CipherCore');
 
-class DESCipher extends CipherCore {
-  constructor(keyString, encryptFunc) {
+import { CipherCore } from '../../lib/CipherCore';
+
+export class DESCipher extends CipherCore {
+  private encryptFunc: any;
+  private keyString: string;
+  private initialPermutationTable: number[][];
+  private invertInitialPermutationTable: number[][];
+  private sBoxes: number[][][];
+  private permutedChoiceOne: number[][];
+  private bitRotatedTable: number[];
+  private permutedChoiceTwo: number[][];
+  private permutationTable: number[][];
+
+  constructor(keyString: string, encryptFunc: any) {
     super();
-
+    
     if (!this.keyCheck(keyString)) {
       throw new Error("invalid key");
     }
@@ -150,7 +161,7 @@ class DESCipher extends CipherCore {
    * divide 64 bit into 8 bytes
    *  sum of each byte must be odd
    */
-  keyCheck(sixtyFourBit) {
+  keyCheck(sixtyFourBit: string) {
     if (sixtyFourBit.length !== 64) {
       throw new Error("input must be 64 bit");
     }
@@ -180,7 +191,7 @@ class DESCipher extends CipherCore {
    *
    * every eighth bit is ignored
    */
-  generateSubKey(sixtyFourBit) {
+  generateSubKey(sixtyFourBit: string) {
     const chunkLength = 8;
     const neededChunkLength = 7;
     let currentIndex = 0;
@@ -196,7 +207,7 @@ class DESCipher extends CipherCore {
     return result;
   }
 
-  reduceKeySizeFrom56To48(fiftySixBit) {
+  reduceKeySizeFrom56To48(fiftySixBit: string) {
     // Permuted Choice 2 "PC-2" Ignored bits 9, 18, 22, 25, 35, 38, 43, 54.
     const ignoredBitPos = [8, 17, 21, 24, 34, 37, 42, 53];
     let result = this.getNewBitTextBaseOnPosTable(
@@ -209,7 +220,7 @@ class DESCipher extends CipherCore {
     return result.flat().join("");
   }
 
-  sixBitToFourBit(sixBit, sBox) {
+  sixBitToFourBit(sixBit: string, sBox: number[][]) {
     // console.log('sbox', sBox);
     if (sixBit.length !== 6) {
       throw new Error("the input must be 6 bit");
@@ -245,7 +256,7 @@ class DESCipher extends CipherCore {
     return result;
   }
 
-  fourtyeightBitToThirtytwoBit(fourtyeightBit) {
+  fourtyeightBitToThirtytwoBit(fourtyeightBit: string) {
     if (fourtyeightBit.length !== 48) {
       throw new Error("the input must be 48 bit");
     }
@@ -268,7 +279,7 @@ class DESCipher extends CipherCore {
     return result;
   }
 
-  permute32Bit(thritytwoBit) {
+  permute32Bit(thritytwoBit: string) {
     const result = this.getNewBitTextBaseOnPosTable(
       thritytwoBit,
       this.permutationTable,
@@ -278,7 +289,7 @@ class DESCipher extends CipherCore {
     return result.flat().join('');
   }
 
-  findPosBaseOnIndex(pos, eightTimeEightTable) {
+  findPosBaseOnIndex(pos: number, eightTimeEightTable: number[][]) {
     for (let row = 0; row < eightTimeEightTable.length; row++) {
       for (let col = 0; col < eightTimeEightTable[row].length; col++) {
         if (eightTimeEightTable[row][col] == pos) {
@@ -305,21 +316,21 @@ class DESCipher extends CipherCore {
    * in the output, which also consists of 64 bits
    * 4. As it's quite a regular structure, it's easy to implement in hardware.
    */
-  initialPermutation(sixtyFourBit) {
+  initialPermutation(sixtyFourBit: string) {
     return this.getNewBitTextBaseOnPosTable(
       sixtyFourBit,
       this.initialPermutationTable
     );
   }
 
-  divideBitsIntoTwoGroups(bitString, groupSize) {
+  divideBitsIntoTwoGroups(bitString: string, groupSize: number) {
     const left = bitString.substr(0, groupSize);
     const right = bitString.substr(groupSize);
 
     return [left, right];
   }
 
-  expansionAndPermutationTo48bit(thritytwoBit) {
+  expansionAndPermutationTo48bit(thritytwoBit: string) {
     if (thritytwoBit.length !== 32) {
       console.log({
         thritytwoBit,
@@ -354,7 +365,7 @@ class DESCipher extends CipherCore {
     return result;
   }
 
-  getKeyByRound(roundIndex, currentKey) {
+  getKeyByRound(roundIndex: number, currentKey: string) {
     const [leftKey, rightKey] = this.divideBitsIntoTwoGroups(currentKey, 28);
     const shiftDistance = this.bitRotatedTable[roundIndex];
 
@@ -364,7 +375,7 @@ class DESCipher extends CipherCore {
     return `${newLeftKey}${newRightKey}`;
   }
 
-  leftShift(bitString, distance) {
+  leftShift(bitString: string, distance: number) {
     const length = bitString.length;
     const bitArray = bitString.split("");
 
@@ -385,9 +396,8 @@ class DESCipher extends CipherCore {
     return result.join("");
   }
 
-  encrypt(sixtyFourBit) {
+  encryptOrDecrypt(sixtyFourBit: string, isEncrypt = true) {
     const textAfterInitialPermutation = this.initialPermutation(sixtyFourBit).flat().join('');
-    let currentRound = 0;
     let currentKeyString = this.keyString;
     let current48BitKey;
 
@@ -398,10 +408,17 @@ class DESCipher extends CipherCore {
 
     let leftResult = leftTextBit;
     let rightResult = rightTextBit;
+    
+    const roundKeys = [];
 
-    while (currentRound < this.bitRotatedTable.length) {
-      currentKeyString = this.getKeyByRound(currentRound, currentKeyString);
-      current48BitKey = this.reduceKeySizeFrom56To48(currentKeyString);
+    for(let i = 0; i < this.bitRotatedTable.length; i++) {
+      currentKeyString = this.getKeyByRound(i, currentKeyString);
+      roundKeys.push(currentKeyString);
+    }
+
+    while (roundKeys.length) {
+      const keyString = isEncrypt ? roundKeys.shift() : roundKeys.pop();
+      current48BitKey = this.reduceKeySizeFrom56To48(keyString as string);
       const expandedRightText =
         this.expansionAndPermutationTo48bit(rightResult);
       const encryptResult = this.encryptFunc(expandedRightText);
@@ -413,23 +430,30 @@ class DESCipher extends CipherCore {
 
       leftResult = rightResult;
       rightResult = temp;
-      currentRound++;
     }
 
     return this.inverseInitialPermutation(`${rightResult}${leftResult}`).flat().join('');
   }
 
+  encrypt(sixtyFourBit: string) {
+    return this.encryptOrDecrypt(sixtyFourBit);
+  }
+  
+  decrypt(sixtyFourBit: string) {
+    return this.encryptOrDecrypt(sixtyFourBit, false);
+  }
+
   getNewBitTextBaseOnPosTable(
-    bitSting,
-    posTable,
+    bitSting: string,
+    posTable: number[][],
     bitStringLength = 64,
-    ignoredBits = []
+    ignoredBits: number[] = []
   ) {
     if (bitSting.length !== bitStringLength) {
       throw new Error(`input must be ${bitStringLength} bit`);
     }
 
-    const result = [];
+    const result: string[][] = [];
 
     for (let i = 0; i < bitSting.length; i++) {
       if (ignoredBits.includes(i)) {
@@ -448,7 +472,7 @@ class DESCipher extends CipherCore {
     return result;
   }
 
-  generateBitData(bitLength) {
+  generateBitData(bitLength: number) {
     let result = "";
 
     for (let i = 0; i < bitLength; i++) {
@@ -459,74 +483,10 @@ class DESCipher extends CipherCore {
     return result;
   }
 
-  inverseInitialPermutation(sixtyFourBit) {
+  inverseInitialPermutation(sixtyFourBit: string) {
     return this.getNewBitTextBaseOnPosTable(
       sixtyFourBit,
       this.invertInitialPermutationTable
     );
   }
-}
-
-const keyString = `0001001100110100010101110111100110011011101111001101111111110001`;
-const dESCipher = new DESCipher(keyString, (input) => {
-  return input;
-});
-
-console.assert(
-  dESCipher.leftShift("12345678", 1) === "23456781",
-  "dESCipher.leftShift('12345678', 1) === '23456781' fail"
-);
-console.assert(
-  dESCipher.leftShift("12345678", 2) === "34567812",
-  "dESCipher.leftShift('12345678', 2) === '34567812' fail"
-);
-
-const bitText = dESCipher.generateBitData(56);
-const testBitText = dESCipher.generateBitData(64);
-
-const cipher = dESCipher.encrypt(testBitText);
-
-console.log({
-  testBitText,
-  cipher
-})
-
-console.log('128bit', dESCipher.generateBitData(128));
-
-console.assert(
-  dESCipher.reduceKeySizeFrom56To48(bitText).length === 48,
-  "dESCipher.reduceKeySizeFrom56To48(bitText).length === 48 fail"
-);
-
-const thritytwoBit = dESCipher.generateBitData(32);
-const expansion = dESCipher.expansionAndPermutationTo48bit(thritytwoBit);
-
-console.assert(expansion.length === 48, "expansion.length === 48 fail");
-console.assert(dESCipher.permute32Bit(thritytwoBit).length === 32, "dESCipher.permute32Bit(thritytwoBit).length === 32 fail");
-
-console.assert(dESCipher.bitsXor('111', '111') === '000');
-console.assert(dESCipher.bitsXor('011', '111') === '100');
-console.assert(dESCipher.bitsXor('011', '101') === '110');
-
-
-
-// const result = dESCipher.fourtyeightBitToThirtytwoBit(bitText);
-// console.assert(dESCipher.keyCheck(keyString) === true);
-// const keyString2 = `1001001100110100010101110111100110011011101111001101111111110001`;
-// console.assert(
-//   dESCipher.keyCheck(keyString2) === false,
-//   "dESCipher.keyCheck(keyString2) === false fail"
-// );
-// const subKey = dESCipher.generateSubKey(keyString);
-// console.log({ subKey });
-
-// console.log({
-//   bitText,
-//   length: bitText.length,
-//   result,
-//   resultLength: result.length
-// });
-
-// console.log("48 to 32", dESCipher.fourtyeightBitToThirtytwoBit(bitText));
-
-// console.log(dESCipher.sixBitToFourBit('110011', dESCipher.s1box));
+} 

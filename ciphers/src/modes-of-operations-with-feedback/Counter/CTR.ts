@@ -20,18 +20,23 @@
  * 
  * the counter has the same size as the used block
  */
-
-const { CipherCore } = require('../../../lib/CipherCore');
+import { CipherCore } from '../../lib/CipherCore';
 
 class CTR extends CipherCore {
-    constructor(key, counters, encryptFunction) {
+    private key: any;
+    private counters: any;
+    private encryptFunction: any;
+    private nonce: any;
+
+    constructor(key: any, counters: any, encryptFunction: any) {
+        super();
         this.nonce = "11110000";
         this.encryptFunction = encryptFunction;
         this.key = key;
         this.counters = counters;
     }
 
-    encrypt(plainTextArr) {
+    encrypt(plainTextArr: string[]) {
         const result = [];
         
         for (let i = 0; i < plainTextArr.length; i++) {
@@ -43,7 +48,7 @@ class CTR extends CipherCore {
         return result;
     }
 
-    decrypt(cipherTextArr) {
+    decrypt(cipherTextArr: string[]) {
         const result = [];
         
         for (let i = 0; i < cipherTextArr.length; i++) {

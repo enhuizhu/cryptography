@@ -62,8 +62,8 @@ export const PlayfairCipherUI: FC = () => {
             </Box>
             <Box marginTop="1rem">
               3. Should construct 5 x 5 table base on the key, I/J should occupy
-              the same cell, and all the letters inside the key, should fill
-              into the 5 x 5 table first, the fill in the rest of letters into
+              the same cell, and all the letters inside the key, should be filled
+              into the 5 x 5 table first, then fill the rest letters into
               the table. for example, if the key is "HLC", then the 5 x 5 table
               should be like below.
               <TableContainer>
@@ -139,7 +139,7 @@ export const PlayfairCipherUI: FC = () => {
               Decryption
             </Box>
             <Box marginTop="1rem">
-              To decrypt it, we need to follow the opposite operations:
+              To decrypt it, we need to do the opposite operations:
             </Box>
             <Box marginTop="1rem">1. Put the cipher text into pairs.</Box>
             <Box marginTop="1rem">

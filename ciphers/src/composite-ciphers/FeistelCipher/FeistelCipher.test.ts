@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { FeistelCipher } from './FeistelCipher';
 
-describe.only('FeistelCipher test suites', () => {
+describe('FeistelCipher test suites', () => {
   describe('test suites for one round', () => {
     const feistelCipher = new FeistelCipher([1], (input, k) => {
       return (input ^ k) % 26;

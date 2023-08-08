@@ -20,23 +20,28 @@
  * 3. it's infeasible to determine d given e and n
  */
 
-class RSA {
-  constructor(p, q) {
+export class RSA {
+  private N: number;
+  private ON: number;
+  private E: number;
+  private D: number;
+  
+  constructor(p: number, q: number) {
     this.N = this.getN(p, q);
     this.ON = this.getON(p, q);
-    this.E = this.getE();
+    this.E = this.getE(this.ON);
     this.D = this.getD();
   }
 
-  getN(p, q) {
+  getN(p: number, q: number) {
     return p * q;
   }
 
-  getON(p, q) {
+  getON(p: number, q: number) {
     return (p - 1) * (q - 1);
   }
 
-  getE(ON) {
+  getE(ON: number) {
     return ON - 1;
   }
 
@@ -64,15 +69,15 @@ class RSA {
     };
   }
 
-  encryptM(m) {
+  encryptM(m: number) {
     return Math.pow(m, this.E) % this.N;
   };
 
-  decryptC(c) {
+  decryptC(c: number) {
     return Math.pow(c, this.D) % this.N;
   }
 
-  encrypt(plainTextNumberArr) {
+  encrypt(plainTextNumberArr: number[]) {
     const result = [];
 
     for (const plainTextNumber of plainTextNumberArr) {
@@ -82,7 +87,7 @@ class RSA {
     return result;
   }
 
-  decrypt(cipHerTextNumberArr) {
+  decrypt(cipHerTextNumberArr: number[]) {
     const result = [];
 
     for (const cipherTextNumber of cipHerTextNumberArr) {
@@ -92,5 +97,3 @@ class RSA {
     return result;
   }
 }
-
-module.exports = { RSA }
