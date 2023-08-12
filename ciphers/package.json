@@ -22,5 +22,8 @@
     "ts-node": "^10.9.1",
     "tsc-watch": "^6.0.4",
     "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "node-fetch": "^3.3.2"
   }
 }

@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { ListItem, ListItemText, List } from '@mui/material';
-import { AtashCipher } from '../atash-cipher/AtashCipher';
 import { CaesarCipherUI } from '../caesar-cipher/CaesarCipher';
 import { PlayfairCipherUI } from '../play-cipher/PlayfairCipher';
 import { VigenereCipherUI } from '../vigenere-cipher';
@@ -9,6 +8,10 @@ import { RailFenceCipherUI } from '../rail-fence-cipher';
 import { ColumnarCipherUI } from '../columnar-cipher';
 import { FeistelCipherUI } from '../feistel-cipher';
 import { DesCipherUI } from '../des-cipher';
+import { SecurityProtocol } from '../security-protocol';
+import { NeedhamSchroederPublicKeyProtocol } from '../needham-schroeder-public-key-protocol';
+import { Kerberos } from '../kerberos';
+import { FiatShamier } from '../fiat-shamier';
 
 interface linkItem {
   label: string;
@@ -16,10 +19,6 @@ interface linkItem {
 }
 
 const links: linkItem[] = [
-  {
-    label: 'Atash Cipher (substitution ciphers)',
-    component: AtashCipher,
-  },
   {
     label: 'Caesar Cipher (substitution ciphers)',
     component: CaesarCipherUI,
@@ -51,7 +50,23 @@ const links: linkItem[] = [
   {
     label: 'DES Cipher (composite ciphers)',
     component: DesCipherUI,
-  }      
+  },
+  {
+    label: 'Security Protocol',
+    component: SecurityProtocol,
+  },
+  {
+    label: 'Needham Schroeder Public Key Protocol',
+    component: NeedhamSchroederPublicKeyProtocol,
+  },
+  {
+    label: 'Kerberos',
+    component: Kerberos,
+  },
+  {
+    label: 'Fiat shamier',
+    component: FiatShamier,
+  }           
 ];
 
 interface SideBarProps {

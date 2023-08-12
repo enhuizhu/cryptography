@@ -4,6 +4,8 @@
  * 2. prime number q and a
  * a < q
  * both a and q maybe public
+ * a is primitive root
+ * 
  * alice could send them in the first message
  *
  * 3. random number Xa, Xb, Xa < q, Xb < q.
@@ -81,11 +83,30 @@
  * certificates to achieve mutual authentication between participants. Typically, this 
  * would be done by adding an exchange of digitally signed identification tokens.
  * 
+ *  Group Diffie-Hellman for three or more principals
  * 
- * 
+ * 1 Alice generate random number Xa, and send Ya = a ^ Xa  % q to bob
+ * 2.Bob generate random number Xb, and send Yb = a ^ Xb % q to carl
+ * 3.Carl generate random number Xc, and send Yc = a ^ Xc % q to alice
+ * 4. Alice generate Yc' = Yc ^ Xa = (a ^ Xc) ^ Xa % q and send it to bob
+ * 5. Bob generate Ya' = Ya ^ Xb = (a ^ Xa) ^Xb % q and send it to carl
+ * 6. Carl generate Yb' = Yb ^ Xc = (a ^ Xb) ^ Xc % q and send it to alice
+ * 7. Alice use private key get Yb' ^ Xa = a ^ (Xb x Xc x Xa) % q
+ * 8. Bob use private key get Yc' ^ Xb = a ^ (Xc x Xa x Xb) % q 
+ * 9. Carl use private key get Ya' ^ Xc = a ^ (Xa x Xb x Xc) % q  
+ * so at the end Alice, bob and Carl can get the same key
  */
-class DiffieHellMan {
-  constructor(q, a) {
+export class DiffieHellMan {
+  public q: number;
+  public a: number;
+
+  private Xa: number;
+  private Xb: number;
+
+  public Ya: number;
+  public Yb: number;
+
+  constructor(q: number, a: number) {
     if (a >= q) {
       throw new Error("a must be smaller then q!");
     }
@@ -113,6 +134,4 @@ class DiffieHellMan {
   }
 }
 
-
-module.exports = { DiffieHellMan };
 

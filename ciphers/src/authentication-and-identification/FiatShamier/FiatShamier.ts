@@ -8,10 +8,30 @@
  * squaring modulo n is easy to compute, but square root modulo n is not
  */
 
-const { euclideanGCD } = require('../../number-theory/euclidean algorithm/euclideanGCD');
+import fetch from 'node-fetch';
 
-class FiatShamir {
-    constructor(p, q, proversIP, verifierIP) {
+export class FiatShamir {
+    // help to generate private key
+    private N: number;
+    private proversIP: string;
+    private verifierIP: string;
+    // private key range must be 1 to N
+    private s: number|undefined;
+    // this.v is equal to this.s^2
+    private v: number|undefined;
+
+    // commitment
+    private r: number|undefined;
+    // witness
+    private x: number|undefined;
+    // challenge
+    private c: number|undefined;
+
+    // result of the calculation
+    // this.r * math.pow(s, c) % this.N
+    private Y: number|undefined;
+    
+    constructor(p: number, q: number, proversIP:string, verifierIP: string) {
         this.N = p * q;
         this.proversIP = proversIP;
         this.verifierIP = verifierIP;
@@ -34,15 +54,9 @@ class FiatShamir {
         // commitment 0 to n - 1
         this.r = Math.round(Math.random() * (this.N - 1));
         // witness
-        this.x = Math.pow(r, 2) % this.N;
+        this.x = Math.pow(this.r, 2) % this.N;
 
-        fetch({
-            url: this.verifierIP,
-            method: 'post',
-            data: JSON.stringify({
-                witness: this.x 
-            })
-        }).then(console.log)
+        fetch(this.verifierIP, {method: 'post', body: JSON.stringify({x: this.x})}).then(console.log)
         .catch(console.error);
     }
 
@@ -53,10 +67,9 @@ class FiatShamir {
         // 0 or 1
         this.c = Math.round(Math.random());
         
-        fetch({
-            url: this.proversIP,
+        fetch(this.proversIP, {
             method: 'POST',
-            data: JSON.stringify({
+            body: JSON.stringify({
                 challenge: this.c
             })
         }).then(console.log)
@@ -67,12 +80,14 @@ class FiatShamir {
         // Peggy send it to victor to show that she knows her
         // private key s modulo n, in doing so, she claim to be
         // peggy (who is the only one know private key)
+        if (!this.r || !this.s || !this.c) return ;
+
         this.Y = (this.r * Math.pow(this.s, this.c)) % this.N;
 
-        fetch({
-            url: this.verifierIP,
+        fetch(this.verifierIP, {
+            
             method: 'POST',
-            data: JSON.stringify({
+            body: JSON.stringify({
                 y: this.Y
             })
         })
@@ -80,13 +95,12 @@ class FiatShamir {
     // witnessMuptiPublicKey = ((r^2 % n) * (s^2 % n)^c) % n
     // ypower = (r^2 * (s^c % n)^2) % n
     verifyY() {
-        const yPower = Math.power(this.Y, 2) % this.N;
-        
-        
+        if (!this.Y || !this.x || !this.v || !this.c) return ;
+
+        const yPower = Math.pow(this.Y, 2) % this.N;
+
         const witnessMuptiPublicKey = (this.x * Math.pow(this.v, this.c)) % this.N;
 
         return yPower === witnessMuptiPublicKey;
     }
 }
-
-module.exports = { FiatShamir };

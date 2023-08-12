@@ -1,4 +1,4 @@
-const euclideanGCD = (a, b) => {
+export const euclideanGCD = (a: number, b: number): number => {
     let dividend = a;
     let divisor = b;
     
@@ -15,9 +15,3 @@ const euclideanGCD = (a, b) => {
     return euclideanGCD(divisor, remainder);
 }
 
-
-
-console.assert(euclideanGCD(4, 2) === 2, "euclideanGCD(4, 2) === 2 fail");
-console.assert(euclideanGCD(5, 7) === 1, "euclideanGCD(5, 7) === 1 fail");
-
-module.exports = {euclideanGCD};

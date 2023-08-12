@@ -20,6 +20,8 @@
  * 3. it's infeasible to determine d given e and n
  */
 
+import { euclideanGCD } from '../../number-theory/euclidean-algorithm/euclideanGCD'
+
 export class RSA {
   private N: number;
   private ON: number;
@@ -42,7 +44,15 @@ export class RSA {
   }
 
   getE(ON: number) {
-    return ON - 1;
+    const max = Math.round(Math.sqrt(ON));
+    
+    for (let i = 2; i <= ON; i++) {
+      if (euclideanGCD(i, ON) === 1) {
+        return i;
+      }
+    }
+
+    throw new Error(`can not get E or ${ON}`);
   }
 
   getD() {
@@ -70,11 +80,23 @@ export class RSA {
   }
 
   encryptM(m: number) {
-    return Math.pow(m, this.E) % this.N;
+    let result = 1;
+    
+    for (let i = 1 ; i <= this.E; i++) {
+      result = result * (m % this.N) % this.N
+    }
+
+    return result % this.N;
   };
 
   decryptC(c: number) {
-    return Math.pow(c, this.D) % this.N;
+    let result = 1;
+    
+    for (let i = 1 ; i <= this.D; i++) {
+      result = result * (c % this.N) % this.N
+    }
+
+    return result % this.N;
   }
 
   encrypt(plainTextNumberArr: number[]) {

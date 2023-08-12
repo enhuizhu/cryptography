@@ -4,21 +4,20 @@
 
 const { DiffieHellMan } = require("../DiffieHellman/DiffieHellman");
 
-class ElGamal extends DiffieHellMan {
-  constructor(q, a, encryptFunction, decryptFunction) {
+export class ElGamal extends DiffieHellMan {
+  constructor(q: number, a: number, encryptFunction: any, decryptFunction: any) {
     super(q, a);
     this.encryptFunction = encryptFunction;
     this.decryptFunction = decryptFunction;
     this.K = this.getKeyBaseOnYaAndXb();
   }
 
-  encrypt(m) {
+  encrypt(m: number) {
     return this.encryptFunction(this.K, m);
   }
 
-  decrypt(c) {
+  decrypt(c: number) {
     return this.decryptFunction(this.K, c);
   }
 }
 
-module.exports = { ElGamal };

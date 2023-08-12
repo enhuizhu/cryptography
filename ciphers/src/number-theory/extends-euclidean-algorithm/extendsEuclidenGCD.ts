@@ -1,4 +1,4 @@
-const extendsEuclideanGCD = (a, b) => {
+export const extendsEuclideanGCD = (a: number, b: number): number => {
     let dividend = a;
     let divisor = b;
 
@@ -39,8 +39,3 @@ const extendsEuclideanGCD = (a, b) => {
 
     return extendsEuclideanGCD(divisor, r1);
 }
-
-console.assert(extendsEuclideanGCD(4, 2) === 2, "extendsEuclideanGCD(4, 2) === 2 fail");
-console.assert(extendsEuclideanGCD(5, 7) === 1, "extendsEuclideanGCD(5, 7) === 1 fail");
-
-module.exports = {extendsEuclideanGCD}

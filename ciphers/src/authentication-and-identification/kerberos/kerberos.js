@@ -12,8 +12,7 @@ class Kerberos {
         return fetch({
             url: this.KASURL,
             body: JSON.stringify({
-                username,
-                password
+                username
             })
         }).then(result => {
             this.KATGS = result.KATGS;

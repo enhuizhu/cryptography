@@ -52,7 +52,7 @@
  * 
  */
 
-const { RSA } = require('../../public-key-cryptography/RSA/RSA')
+import { RSA } from '../../public-key-cryptography/RSA';
 
 // digital signature need public key and also private key
 // private key is used to sign the message
@@ -62,9 +62,12 @@ const { RSA } = require('../../public-key-cryptography/RSA/RSA')
 // bob receive (m, s), bob will use VA to verify 
 // if Ee(s) === m, if it's true, then the message
 // is sent by alice.
-class DigitalSignature {
+export class DigitalSignature {
   // e public key, d private key
-  constructor(p, q, signableMessages) {
+  private RSA: RSA;
+  private signableMessages: number[];
+  
+  constructor(p: number, q: number, signableMessages: number[]) {
     this.RSA = new RSA(p, q);
     this.signableMessages = signableMessages;
   }
@@ -72,19 +75,17 @@ class DigitalSignature {
   // Signing transformation
   // SA is Dd it need private key
   // can use RSA to decrypt it 
-  SA(m) {
+  SA(m: number) {
     return this.RSA.decryptC(m);
   }
 
   // e is public key
-  Ee(s) {
-    return this.RSA.encrypt(s);
+  Ee(s: number) {
+    return this.RSA.encryptM(s);
   }
 
   // verification transformation
-  VA(m, s) {
+  VA(m: number, s: number) {
     return this.Ee(s) === m && this.signableMessages.includes(s);
   }
 }
-
-module.exports = { DigitalSignature };

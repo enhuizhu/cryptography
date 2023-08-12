@@ -55,7 +55,7 @@ class AESCipher {
    * 
    * replaces bytes using fixed S-box to achieve non-linearity.
    */
-  subBytes(state) {
+  subBytes(state: any) {
 
   }
 
@@ -64,7 +64,7 @@ class AESCipher {
    * @param {*} state 
    * permutation
    */
-  shiftRow(state) {
+  shiftRow(state: any) {
 
   }
 
@@ -74,7 +74,7 @@ class AESCipher {
    * mix up bits to achieve a wider distribution of plaintext
    * in the whole message space.
    */
-  mixColumns(state) {
+  mixColumns(state: any) {
 
   }
 
@@ -84,7 +84,7 @@ class AESCipher {
    * @param {*} key 
    * provides the necessary secret randomness
    */
-  addRoundKey(state, key) {
+  addRoundKey(state: any, key: any) {
 
   }
 
