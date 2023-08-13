@@ -12,6 +12,10 @@ import { SecurityProtocol } from '../security-protocol';
 import { NeedhamSchroederPublicKeyProtocol } from '../needham-schroeder-public-key-protocol';
 import { Kerberos } from '../kerberos';
 import { FiatShamier } from '../fiat-shamier';
+import { RSA } from '../rsa';
+import { DiffieHellman } from '../diffie-hellman';
+import { MDC } from '../mdc';
+import { MAC } from '../mac';
 
 interface linkItem {
   label: string;
@@ -66,7 +70,23 @@ const links: linkItem[] = [
   {
     label: 'Fiat shamier',
     component: FiatShamier,
-  }           
+  },
+  {
+    label: 'RSA',
+    component: RSA,
+  },
+  {
+    label: 'Diffie Hell Man',
+    component: DiffieHellman,
+  },
+  {
+    label: 'Message Detection Code',
+    component: MDC,
+  },
+  {
+    label: 'Message Authentication Code',
+    component: MAC,
+  }                                                                                        
 ];
 
 interface SideBarProps {

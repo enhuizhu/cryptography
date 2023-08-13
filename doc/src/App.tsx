@@ -1,9 +1,10 @@
 import React, {useState, useCallback, FC} from 'react';
 import { Grid, Container } from '@mui/material';
 import { SideBar } from './components/side-bar';
+import { DefaultComponent } from './components/default-component';
 
 function App() {
-  const [CipherComponent, setCipherComponent] = useState<React.ReactNode>(<>hello</>)
+  const [CipherComponent, setCipherComponent] = useState<React.ReactNode>(<DefaultComponent />)
   const handleComponentChange = useCallback((Component: FC) => {
     const Node = <Component />
     setCipherComponent(Node);
